@@ -12,15 +12,13 @@ SCRIPTS_DIR = scripts
 RESULTS_DIR = results
 
 # Source files
-VECTOR_ADD_SRC = $(SRC_DIR)/vector_add_fixed.cu
 MATMUL_SRC = $(SRC_DIR)/matmul_global.cu
 
 # Executables
-VECTOR_ADD_BIN = $(BUILD_DIR)/vector_add_fixed
 MATMUL_BIN = $(BUILD_DIR)/matmul_global
 
 # Default target
-.PHONY: all clean build vector-add matmul benchmark visualize
+.PHONY: all clean build matmul benchmark visualize parse help
 
 all: build
 
@@ -28,20 +26,14 @@ all: build
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-# Build vector addition program
-vector-add: $(BUILD_DIR) $(VECTOR_ADD_BIN)
-
-$(VECTOR_ADD_BIN): $(VECTOR_ADD_SRC)
-	$(NVCC) $(NVCC_FLAGS) $< -o $@
-
 # Build matrix multiplication program
 matmul: $(BUILD_DIR) $(MATMUL_BIN)
 
 $(MATMUL_BIN): $(MATMUL_SRC)
 	$(NVCC) $(NVCC_FLAGS) $< -o $@ $(CUBLAS_FLAGS)
 
-# Build both programs
-build: vector-add matmul
+# Build target (same as matmul for consistency)
+build: matmul
 
 # Run benchmarks
 benchmark: matmul
@@ -67,8 +59,7 @@ clean:
 help:
 	@echo "Available targets:"
 	@echo "  all        - Build all programs (default)"
-	@echo "  build      - Build both vector-add and matmul programs"
-	@echo "  vector-add - Build vector addition program"
+	@echo "  build      - Build matrix multiplication program"
 	@echo "  matmul     - Build matrix multiplication program"
 	@echo "  benchmark  - Run benchmark suite"
 	@echo "  visualize  - Run benchmarks and generate visualization"
