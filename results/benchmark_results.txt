@@ -1,0 +1,48 @@
+Running benchmark for N=2
+GPU execution time for N=2: 0.119988 ms
+cuBLAS execution time for N=2: 4.422476 ms
+
+Running benchmark for N=4
+GPU execution time for N=4: 0.108995 ms
+cuBLAS execution time for N=4: 3.973007 ms
+
+Running benchmark for N=8
+GPU execution time for N=8: 0.100595 ms
+cuBLAS execution time for N=8: 3.981219 ms
+
+Running benchmark for N=16
+GPU execution time for N=16: 0.103445 ms
+cuBLAS execution time for N=16: 4.086619 ms
+
+Running benchmark for N=32
+GPU execution time for N=32: 0.114154 ms
+cuBLAS execution time for N=32: 5.173863 ms
+
+Running benchmark for N=64
+GPU execution time for N=64: 0.121780 ms
+cuBLAS execution time for N=64: 5.254390 ms
+
+Running benchmark for N=128
+GPU execution time for N=128: 0.137383 ms
+cuBLAS execution time for N=128: 5.438643 ms
+
+Running benchmark for N=256
+GPU execution time for N=256: 0.236384 ms
+cuBLAS execution time for N=256: 37.200206 ms
+
+Running benchmark for N=512
+GPU execution time for N=512: 1.011838 ms
+cuBLAS execution time for N=512: 5.505622 ms
+
+Running benchmark for N=1024
+GPU execution time for N=1024: 6.865996 ms
+cuBLAS execution time for N=1024: 6.539420 ms
+
+Running benchmark for N=2048
+GPU execution time for N=2048: 53.749529 ms
+cuBLAS execution time for N=2048: 11.923331 ms
+
+Running benchmark for N=4096
+GPU execution time for N=4096: 323.627160 ms
+cuBLAS execution time for N=4096: 26.152325 ms
+

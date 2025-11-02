@@ -1,0 +1,192 @@
+# CUDA Matrix Multiplication Benchmark
+
+A CUDA-based matrix multiplication project comparing custom GPU kernel performance against cuBLAS library implementations.
+
+## Project Structure
+
+```
+cuda-matrix-multiplication/
+├── src/                    # CUDA source files
+│   ├── vector_add_fixed.cu
+│   └── matmul_global.cu
+├── scripts/                # Utility scripts
+│   ├── run_benchmarks.sh
+│   ├── parse_results.py
+│   └── visualize_results.py
+├── build/                  # Compiled binaries (generated)
+├── results/                # Benchmark results (generated)
+├── docs/                   # Documentation
+├── Makefile                # Build configuration
+├── requirements.txt        # Python dependencies
+└── README.md
+```
+
+## Prerequisites
+
+- NVIDIA GPU with CUDA support
+- CUDA Toolkit (nvcc compiler)
+- Python 3.6+ (for visualization scripts)
+- cuBLAS library (usually included with CUDA)
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd cuda-matrix-multiplication
+```
+
+2. Install Python dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Verify CUDA installation:
+```bash
+nvcc --version
+```
+
+## Building
+
+### Build All Programs
+```bash
+make all
+# or
+make build
+```
+
+### Build Individual Programs
+```bash
+# Build vector addition program
+make vector-add
+
+# Build matrix multiplication program
+make matmul
+```
+
+### Manual Compilation
+
+For vector addition:
+```bash
+nvcc -arch=sm_75 src/vector_add_fixed.cu -o build/vector_add_fixed
+```
+
+For matrix multiplication:
+```bash
+nvcc -arch=sm_75 src/matmul_global.cu -o build/matmul_global -lcublas
+```
+
+**Note**: Adjust `-arch=sm_75` to match your GPU's compute capability. Common values:
+- `sm_50` - Maxwell (GTX 900 series)
+- `sm_60` - Pascal (GTX 10 series)
+- `sm_75` - Turing (RTX 20 series, GTX 16 series)
+- `sm_80` - Ampere (RTX 30 series)
+- `sm_86` - Ampere (RTX 30 series laptop)
+- `sm_89` - Ada Lovelace (RTX 40 series)
+
+Find your GPU's compute capability: [NVIDIA GPU Compute Capability](https://developer.nvidia.com/cuda-gpus)
+
+## Usage
+
+### Vector Addition
+
+Run the vector addition program:
+```bash
+./build/vector_add_fixed
+```
+
+### Matrix Multiplication
+
+Run matrix multiplication for a specific size:
+```bash
+./build/matmul_global <matrix_size>
+```
+
+Example:
+```bash
+./build/matmul_global 512
+```
+
+### Benchmarking
+
+Run the full benchmark suite:
+```bash
+make benchmark
+```
+
+This will:
+1. Compile the matrix multiplication program (if not already compiled)
+2. Run benchmarks for matrix sizes: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096
+3. Save results to `results/benchmark_results.txt`
+
+### Visualization
+
+Generate performance comparison plots:
+```bash
+make visualize
+```
+
+This will:
+1. Run benchmarks (if not already run)
+2. Parse results
+3. Generate a visualization saved to `results/benchmark_visualization.png`
+
+Or parse results manually:
+```bash
+python3 scripts/parse_results.py
+```
+
+Or visualize existing results:
+```bash
+python3 scripts/visualize_results.py
+```
+
+## Implementation Details
+
+### Custom CUDA Kernel
+
+The `matmul_global` kernel uses a naive matrix multiplication algorithm:
+- Each thread computes one element of the output matrix
+- Thread blocks are organized as 32x32 grids
+- Global memory access pattern (no shared memory optimization)
+
+### cuBLAS Comparison
+
+The project includes cuBLAS (`cublasSgemm`) implementation for comparison:
+- Industry-standard optimized matrix multiplication
+- Single-precision floating point operations
+- Uses optimized GPU kernels from NVIDIA
+
+## Results
+
+The benchmark compares:
+- **Custom CUDA Kernel**: Naive implementation with global memory access
+- **cuBLAS**: Highly optimized NVIDIA library implementation
+
+Expected observations:
+- For small matrices: Overhead may favor custom kernel
+- For large matrices: cuBLAS typically performs significantly better due to optimizations
+
+## Cleaning
+
+Remove build artifacts and results:
+```bash
+make clean
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+[Add your license here]
+
+## References
+
+- [CUDA Programming Guide](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)
+- [cuBLAS Documentation](https://docs.nvidia.com/cuda/cublas/index.html)
+- [NVIDIA GPU Compute Capabilities](https://developer.nvidia.com/cuda-gpus)
